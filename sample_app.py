@@ -88,7 +88,7 @@ for sentence in df_sentences.sentence:
             task = token.pos_
 
         elif token.pos_=='ADJ'and exercise_type == 'Выбор правильного прилагательного':
-            options = [token.text, token._.inflect('JJS')]
+            options = [[token.text, token._.inflect('JJS')]]
             answer = token.text
             #st.write(options)
             task = token.pos_
