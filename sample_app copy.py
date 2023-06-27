@@ -73,36 +73,34 @@ df_sentences = pd.DataFrame({'sentence': tokens_sens})
 #st.write(df_sentences)
 
 
-options = []
+word_forms = []
 task = ''
 answer = ''
-df = pd.DataFrame({'sentence':'', 'options': options, 'answer':answer, 'task':task, 'result':[]})
+df = pd.DataFrame({'sentence':'', 'word_forms': word_forms, 'answer':answer, 'task':task, 'result':[]})
 nlp = spacy.load("en_core_web_sm") # изменение формы глагола с помощью pyinflect
 for sentence in df_sentences.sentence:
         #st.write(sentence)
     for token in nlp(str(sentence)):
         #st.write(token)
         if token.pos_=='VERB' and exercise_type == 'Выберите правильную форму глагола':
-            answer = [token.text for token in nlp(str(sentence)) if token.pos_=='VERB']
-            options.append(list(set([token._.inflect('VB'), token._.inflect('VBN'), token._.inflect('VBP'), token._.inflect('VBZ'), token._.inflect('VBG'), token._.inflect('VBD')])))
+            word_forms = [token._.inflect('VB'), token._.inflect('VBN'), token._.inflect('VBP'), token._.inflect('VBZ'), token._.inflect('VBG'), token._.inflect('VBD')]
+            answer = token
             task = token.pos_
-
         elif token.pos_=='ADJ'and exercise_type == 'Выбор правильного прилагательного':
-            options = [token.text, token._.inflect('JJS')]
+            word_forms = [token.text, token._.inflect('JJS')]
             answer = token.text
-            #st.write(options)
+            #st.write(word_forms)
             task = token.pos_
             #st.write('правильно')
         # elif str(token) == 'a' and exercise_type == 'Выберите правильный артикль':
-        #     options = ['a', 'the', 'an']
+        #     word_forms = ['a', 'the', 'an']
         #     answer = token
         #     #task ='article'
         else: pass
 # # отобрать предложения, где есть глагол или прилагательное
          
     if len(nlp(str(sentence))) > 3:            
-        df.loc[len(df)]=[sentence, options, answer, task, []]  
-        options=[]  
+        df.loc[len(df)]=[sentence, word_forms, answer, task, []]    
     
 
 
@@ -111,15 +109,10 @@ if exercise_type == 'Заполните пропуск':
 
     st.subheader('Выберите правильные варианты пропущенных слов:')
 
-df["sentence_hidden"] = df["sentence"]
-for index, row in df.iterrows(): 
-    for i in row.answer:
-        df["sentence_hidden"][index] = df["sentence_hidden"][index].replace(i, ' ___ ')
-#df["sentence_hidden"]= df.apply(lambda x: x['sentence'].replace(str(x['answer']), ' ___ '), axis=1)
-#df["sentence_hidden"]= df.apply(lambda x: x['sentence'].replace(str(any(['Little', 'Cap'])), ' ___ '), axis=1)
+df["sentence_hidden"]= df.apply(lambda x: x['sentence'].replace(str(x['answer']), ' ___ '), axis=1)
 
 
-key=0
+
 
 for index, row in df.iterrows():
     #st.write(row['sentence'], row['answer'])
@@ -131,30 +124,28 @@ for index, row in df.iterrows():
         #st.write('Тут список ответов')
         #st.write(index)
         option = []
-        for i in range(len(row['options'])):
+        for i in range(len(row['word_forms'])):
             #st.write(i)
-            key+=1
             
-            option = row['options'][i]
+            option.append(row['word_forms'][i])
             #st.write(i, option)
             #df['result'][index] = i
         #option = sorted(option, key=lambda k: random.random())
-            option = ['–––'] + option
+        option = ['–––'] + option
         #option = random.sample(option, len(option))
-            df['result'][index] =  st.selectbox('nolabel', option, label_visibility="hidden", key =str(key) )
+        df['result'][index] =  st.selectbox('nolabel', option, label_visibility="hidden", key =str(index) )
         #st.write('1111', df['origin_sentences'].astype('unicode').values)
         #st.write(df['result'][index])
-            if df['result'][index] == '–––':
-                pass
+        if df['result'][index] == '–––':
+            pass
         
             
         #elif df['result'][index] == df['answer'][index]:
-            #elif df['result'][index] == str(df['answer'][index]):
-            elif df['result'][index] == str(row['answer'][i]):
-                st.success('Это правльный ответ', icon="✅")
+        elif df['result'][index] == str(df['answer'][index]):
+            st.success('Это правльный ответ', icon="✅")
             
-            else:
-                st.error('Попробуйте еще раз', icon="😟")
+        else:
+            st.error('Попробуйте еще раз', icon="😟")
     
 
 
