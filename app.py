@@ -26,7 +26,7 @@ with open('Little_Red_Cap_ Jacob_and_Wilhelm_Grimm.txt') as f:
 text = text.replace('\n','')
 
 
-text = st.text_area('Загрузите в это поле ваш текст для генерации упражнений. Или воспользуйтесь нашим', text)
+text = st.text_area('Текст', text)
 
 
 
