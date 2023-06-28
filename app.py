@@ -5,6 +5,7 @@ import pandas as pd
 import spacy
 import pyinflect
 import random     
+import numpy as np
 
 from nltk.corpus import stopwords
 
@@ -89,6 +90,7 @@ for sentence in df_sentences.sentence:
         elif exercise_type ==  'Расставьте в правильном порядке слова предложения'  and len(nlp(str(sentence))) < 9:
             
             options = [token.text for token in nlp(str(sentence))]
+            #options = random.sample(options, len(options))
             options = [options] * len(options)
             answer = [token.text for token in nlp(str(sentence))]
             
@@ -161,7 +163,8 @@ for index, row in df.iterrows():
             #st.write(i, option)
             #df['result'][index] = i
         #option = sorted(option, key=lambda k: random.random())
-            option = random.sample(option, len(option))
+            #option = random.sample(option, len(option))
+            #np.random.shuffle(option)
             option = ['–––'] + option
         #option = random.sample(option, len(option))
             df['result'][index] =  st.selectbox('nolabel', option, label_visibility="hidden", key =str(key) )
