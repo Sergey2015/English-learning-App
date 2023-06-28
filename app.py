@@ -13,7 +13,7 @@ from nltk.corpus import stopwords
 nltk.download('punkt')
 
 
-
+random.seed(4)
 
 st.header('Генератор упражнений по английскому')
 st.subheader('Вставьте текст для создания упражнения')
@@ -157,6 +157,7 @@ for index, row in df.iterrows():
 
             #option = random.sample(option, len(option))
             #np.random.shuffle(option)
+            random.shuffle(option)
             # for i in range(len(option)):
             option = ['–––'] + option
             st.write(len(option))
