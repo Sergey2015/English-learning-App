@@ -2,6 +2,7 @@ nltk==3.8.1
 pandas==1.5.3
 pyinflect==0.5.1
 spacy==3.5.3
+https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.5.0/en_core_web_sm-3.5.0-py3-none-any.whl
 spacy-legacy==3.0.12
 spacy-loggers==1.0.4
 spacytextblob==4.0.0
