@@ -145,37 +145,33 @@ for index, row in df.iterrows():
 key=0
 
 for index, row in df.iterrows():
-    #st.write(row['sentence'], row['answer'])
     col1, col2 = st.columns(2)
     with col1:
         st.write('')
         st.write(str(row['sentence_hidden'])) 
     with col2:
-        #st.write('Тут список ответов')
-        #st.write(index)
         option = []
         for i in range(len(row['options'])):
-            #st.write(i)
             key+=1
-            #st.write(row['options'])
-            
             option = row['options'][i]
-            #st.write(i, option)
-            #df['result'][index] = i
-        #option = sorted(option, key=lambda k: random.random())
+
             #option = random.sample(option, len(option))
-            np.random.shuffle(option)
+            #np.random.shuffle(option)
+            # for i in range(len(option)):
+            option = ['–––'] + option
+            st.write(len(option))
+            st.write(option)
+            #     print(i)
+            #     option[i] = ['–––'] + i
+
             option = ['–––'] + option
         #option = random.sample(option, len(option))
             df['result'][index] =  st.selectbox('nolabel', option, label_visibility="hidden", key =str(key) )
-        #st.write('1111', df['origin_sentences'].astype('unicode').values)
-        #st.write(df['result'][index])
+            st.write(df['result'][index])
+
             if df['result'][index] == '–––':
                 pass
-        
-            
-        #elif df['result'][index] == df['answer'][index]:
-            #elif df['result'][index] == str(df['answer'][index]):
+
             elif df['result'][index] == str(row['answer'][i]):
                 st.success('Это правльный ответ', icon="✅")
             

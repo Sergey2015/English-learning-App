@@ -1,4 +1,5 @@
 import streamlit as st
+import numpy as np
 
 tasks = [ 
     {'sentence': 'THE BUZZ IN THE STREET _____ like the humming of flies.',
@@ -48,6 +49,7 @@ for task in tasks:
     with col2:
         for i in range(len(task['options'])):
             option = task['options'][i]
+            np.random.shuffle(option)
             task['result'][i] = st.selectbox('nolabel', 
                                              ['–––'] + option, 
                                              label_visibility="hidden")
