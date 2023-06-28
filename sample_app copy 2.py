@@ -17,32 +17,8 @@ nltk.download('punkt')
 st.header('Генератор упражнений по английскому')
 st.subheader('Вставьте текст для создания упражнения')
 
-text2 = st.text_area('nolabel', label_visibility="hidden")
+#text2 = st.text_area('nolabel', label_visibility="hidden")
 
-
-
-
-
-
-
-
-
-
-
-
-
-exercise_type = st.sidebar.selectbox('Выберите тип упражнения:', ['', 'Выберите правильную форму глагола',
-                                                                   'Выбор правильного прилагательного', 'Выберите правильный артикль', 'Выберите слово', 'Заполните пропуск'], format_func=lambda x: 'Ничего не выбрано' if x == '' else x)
-
-if exercise_type:
-    st.success('Ура! Вы выбрали тип упражнения 🎉')
-    st.write("Вы выбрали упражнение: ", exercise_type)
-else:
-    st.warning('Ничего не выбрано')
-
-
-
-import streamlit as st
 text2 = st.text_area('Text to analyze', '''
 Little Red Cap
 
@@ -62,6 +38,29 @@ Little Red Cap promised to obey her mother. The grandmother lived out in the woo
 "To grandmother's."
 
     ''')
+
+
+
+
+
+
+
+
+
+
+
+exercise_type = st.sidebar.selectbox('Выберите тип упражнения:', ['', 'Выберите правильную форму глагола',
+                                                                   'Выбор правильного прилагательного', 'Выберите правильный артикль', 'Выберите слово', 'Заполните пропуск'], format_func=lambda x: 'Ничего не выбрано' if x == '' else x)
+
+if exercise_type:
+    st.success(exercise_type)
+else:
+    st.warning('Для начала выберите в боковом меню тип упражнения')
+
+
+
+
+
 
 
 
@@ -89,7 +88,7 @@ for sentence in df_sentences.sentence:
 
         elif token.pos_=='ADJ'and exercise_type == 'Выбор правильного прилагательного':
             options = [[token.text, token._.inflect('JJS')]]
-            answer = token.text
+            answer = [token.text]
             #st.write(options)
             task = token.pos_
             #st.write('правильно')
