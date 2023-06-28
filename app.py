@@ -165,10 +165,10 @@ for index, row in df.iterrows():
             #     print(i)
             #     option[i] = ['–––'] + i
 
-            option = ['–––'] + option
+            #option = ['–––'] + option
         #option = random.sample(option, len(option))
             df['result'][index] =  st.selectbox('nolabel', option, label_visibility="hidden", key =str(key) )
-            st.write(df['result'][index])
+            #st.write(df['result'][index])
 
             if df['result'][index] == '–––':
                 pass
