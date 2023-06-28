@@ -19,34 +19,14 @@ st.subheader('Вставьте текст для создания упражне
 
 #text = st.text_area('nolabel', label_visibility="hidden")
 
-text = st.text_area('Text to analyze', '''
-Little Red Cap
-
-Jacob and Wilhelm Grimm
-
-Once upon a time there was big a sweet little girl. Everyone who saw her liked her, but most of all her grandmother, who did not know what to give the child next. Once she gave her a little cap made of red velvet. Because it suited her so well, and she wanted to wear it all the time, she came to be known as Little Red Cap.
-One day her mother said to her, "Come Little Red Cap. Here is a piece of cake and a bottle of wine. Take them to your grandmother. She is sick and weak, and they will do her well. Mind your manners and give her my greetings. Behave yourself on the way, and do not leave the path, or you might fall down and break the glass, and then there will be nothing for your sick grandmother."
-
-Little Red Cap promised to obey her mother. The grandmother lived out in the woods, a half hour from the village. When Little Red Cap entered the woods a wolf came up to her. She did not know what a wicked the an a a animal he was, and was not afraid of him.
-
-"Good day to you, Little Red Cap."
-
-"Thank you, wolf."
-
-"Where are you going so early, Little Red Cap?"
-
-"To grandmother's."
-
-    ''')
-
 
 with open('Little_Red_Cap_ Jacob_and_Wilhelm_Grimm.txt') as f:
-    lines = f.read()
+    text = f.read()
 
-lines = lines.replace('\n','')
+text = text.replace('\n','')
 
 
-text = st.text_area('Текст', lines)
+text = st.text_area('Загрузите в это поле ваш текст для генерации упражнений. Или воспользуйтесь нашим', text)
 
 
 
@@ -54,7 +34,7 @@ text = st.text_area('Текст', lines)
 
 
 exercise_type = st.sidebar.selectbox('Выберите тип упражнения:', ['', 'Выберите правильную форму глагола',
-                                                                   'Выбор правильного прилагательного', 'Выберите правильный артикль', 'Выберите слово', 'Заполните пропуск'], format_func=lambda x: 'Ничего не выбрано' if x == '' else x)
+                                                                   'Выбор правильного прилагательного', 'Выберите правильный артикль', 'Расставьте в правильном порядке слова предложения', 'Заполните пропуск'], format_func=lambda x: 'Ничего не выбрано' if x == '' else x)
 
 if exercise_type:
     st.success(exercise_type)
@@ -67,12 +47,16 @@ else:
 
 
 
-
+text = text.replace('"', '')
+text = text.replace(',', '')
+text = text.replace(':', '')
+text = text.replace('-"', '')
 
 tokens_sens = nltk.tokenize.sent_tokenize(text, language='english')
 
 #Создаем датафрейм
 df_sentences = pd.DataFrame({'sentence': tokens_sens})
+df_sentences["sentence"]= df_sentences.apply(lambda x: x['sentence'].replace('.', ''), axis=1)
 #st.write(df_sentences)
 
 
@@ -89,21 +73,32 @@ for sentence in df_sentences.sentence:
             answer = [token.text for token in nlp(str(sentence)) if token.pos_=='VERB']
             options.append(list(set([token._.inflect('VB'), token._.inflect('VBN'), token._.inflect('VBP'), token._.inflect('VBZ'), token._.inflect('VBG'), token._.inflect('VBD')])))
             task = token.pos_
+            write_it_df=1
 
         elif token.pos_=='ADJ'and exercise_type == 'Выбор правильного прилагательного':
             answer = [token.text for token in nlp(str(sentence)) if token.pos_=='ADJ']
             options.append([token.text, token._.inflect('JJS')])
             #st.write(options)
             task = token.pos_
+            write_it_df=1
             #st.write('правильно')
         # elif str(token) == 'a' and exercise_type == 'Выберите правильный артикль':
         #     options = ['a', 'the', 'an']
         #     answer = token
         #     #task ='article'
+        elif exercise_type ==  'Расставьте в правильном порядке слова предложения'  and len(nlp(str(sentence))) < 9:
+            
+            options = [token.text for token in nlp(str(sentence))]
+            options = [options] * len(options)
+            answer = [token.text for token in nlp(str(sentence))]
+            
+            write_it_df=1
+            task = 'order_words'
+
         else: pass
 
     if exercise_type == 'Выберите правильный артикль':
-
+        task = 'articles'
         answer=[]
         test_string = sentence.split(" ")
         #st.write(test_string)
@@ -113,13 +108,20 @@ for sentence in df_sentences.sentence:
                     answer.append(i)
                     options.append([' a ', ' the ', ' an '])
                     break  
-        answer = list(map(lambda x: ' '+ x + ' ', answer))        
+        answer = list(map(lambda x: ' '+ x + ' ', answer))  
+        write_it_df=1      
         #st.write(answer)
 # # отобрать предложения, где есть глагол или прилагательное
         #st.write(options)
-    if len(nlp(str(sentence))) > 3 and len(answer) > 0:            
+
+
+    if len(nlp(str(sentence))) in range(3, 20) and len(answer) > 0 and write_it_df==1:    
+              
         df.loc[len(df)]=[sentence, options, answer, task, []]  
-        options=[]  
+    options=[]  
+    write_it_df=0    
+    answer=[]
+        #answer=[]
     
 
 
@@ -131,7 +133,9 @@ if exercise_type == 'Заполните пропуск':
 df["sentence_hidden"] = df["sentence"]
 for index, row in df.iterrows(): 
     for i in row.answer:
-        df["sentence_hidden"][index] = df["sentence_hidden"][index].replace(i, ' ___ ')
+        if exercise_type == 'Расставьте в правильном порядке слова предложения':
+            df["sentence_hidden"][index] = '__________________________'
+        else: df["sentence_hidden"][index] = df["sentence_hidden"][index].replace(i, ' ___ ')
 #df["sentence_hidden"]= df.apply(lambda x: x['sentence'].replace(str(x['answer']), ' ___ '), axis=1)
 #df["sentence_hidden"]= df.apply(lambda x: x['sentence'].replace(str(any(['Little', 'Cap'])), ' ___ '), axis=1)
 
@@ -157,6 +161,7 @@ for index, row in df.iterrows():
             #st.write(i, option)
             #df['result'][index] = i
         #option = sorted(option, key=lambda k: random.random())
+            option = random.sample(option, len(option))
             option = ['–––'] + option
         #option = random.sample(option, len(option))
             df['result'][index] =  st.selectbox('nolabel', option, label_visibility="hidden", key =str(key) )
