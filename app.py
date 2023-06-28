@@ -164,7 +164,7 @@ for index, row in df.iterrows():
             #df['result'][index] = i
         #option = sorted(option, key=lambda k: random.random())
             #option = random.sample(option, len(option))
-            #np.random.shuffle(option)
+            np.random.shuffle(option)
             option = ['–––'] + option
         #option = random.sample(option, len(option))
             df['result'][index] =  st.selectbox('nolabel', option, label_visibility="hidden", key =str(key) )
