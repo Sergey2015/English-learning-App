@@ -160,15 +160,15 @@ for index, row in df.iterrows():
             random.shuffle(option)
             # for i in range(len(option)):
             option = ['–––'] + option
-            st.write(len(option))
-            st.write(option)
+            #st.write(len(option))
+            #st.write(option)
             #     print(i)
             #     option[i] = ['–––'] + i
 
-            option = ['–––'] + option
+            #option = ['–––'] + option
         #option = random.sample(option, len(option))
             df['result'][index] =  st.selectbox('nolabel', option, label_visibility="hidden", key =str(key) )
-            st.write(df['result'][index])
+            #st.write(df['result'][index])
 
             if df['result'][index] == '–––':
                 pass
