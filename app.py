@@ -7,6 +7,11 @@ import pyinflect
 import random     
 import numpy as np
 
+from tqdm import tqdm
+
+from googletrans import Translator
+
+
 from nltk.corpus import stopwords
 
 
@@ -133,7 +138,7 @@ if exercise_type == 'Заполните пропуск':
     st.subheader('Выберите правильные варианты пропущенных слов:')
 
 df["sentence_hidden"] = df["sentence"]
-for index, row in df.iterrows(): 
+for index, row in tqdm(df.iterrows()): 
     for i in row.answer:
         if exercise_type == 'Расставьте в правильном порядке слова предложения':
             df["sentence_hidden"][index] = '__________________________'
@@ -142,16 +147,62 @@ for index, row in df.iterrows():
 #df["sentence_hidden"]= df.apply(lambda x: x['sentence'].replace(str(any(['Little', 'Cap'])), ' ___ '), axis=1)
 
 
+import time
+start = time.time()
+
+
+
+
+
+
+from datetime import datetime
+import time
+
+
+def fib(n):
+      if n <= 1:
+          return n
+      else:
+          return fib( n - 1 ) + fib( n - 2 )
+
+
+start_time = datetime.now()
+
+
+st.write(fib(35))
+
+st.write(datetime.now() - start_time)
+
+cache = { }
+def fib(n):
+    if n in cache:
+         return cache[ n ]    
+    result = 0
+   
+    if n <= 1:
+        result = n
+    else:
+        result = fib(n-1) + fib(n-2)
+        cache[ n ] = result    
+    return result
+
+st.write( fib(50) )    
+st.write(datetime.now() - start_time)
+
+#@st.cache_data
+
 key=0
 
-for index, row in df.iterrows():
+
+for index, row in tqdm(df.iterrows()):
     col1, col2 = st.columns(2)
     with col1:
         st.write('')
         st.write(str(row['sentence_hidden'])) 
+
     with col2:
         option = []
-        for i in range(len(row['options'])):
+        for i in tqdm(range(len(row['options']))):
             key+=1
             option = row['options'][i]
 
@@ -180,7 +231,7 @@ for index, row in df.iterrows():
                 st.error('Попробуйте еще раз', icon="😟")
     
 
-
+st.write('part 1', time.time()-start, 'seconds.')
 
 # total_sum = sum(df['total'] for row in df.iterrows())
 
