@@ -165,7 +165,7 @@ for index, row in tqdm(df.iterrows()):
                 st.error('Попробуйте еще раз', icon="😟")
     
 
-st.write('part 1', time.time()-start, 'seconds.')
+#st.write('part 1', time.time()-start, 'seconds.')
 
 # total_sum = sum(df['total'] for row in df.iterrows())
 
