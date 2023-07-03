@@ -12,12 +12,13 @@ from tqdm import tqdm
 #from googletrans import Translator
 
 
-#from nltk.corpus import stopwords
+from nltk.corpus import stopwords
 
 
 nltk.download('punkt')
 
-random.seed(42)
+
+random.seed(4)
 
 st.header('Генератор упражнений по английскому')
 st.subheader('Вставьте текст для создания упражнения')
@@ -56,6 +57,7 @@ text = text.replace('"', '')
 text = text.replace(',', '')
 text = text.replace(':', '')
 text = text.replace('-"', '')
+text = text.lower()
 
 tokens_sens = nltk.tokenize.sent_tokenize(text, language='english')
 
@@ -69,13 +71,13 @@ options = []
 task = ''
 answer = ''
 df = pd.DataFrame({'sentence':'', 'options': options, 'answer':answer, 'task':task, 'result':[]})
-nlp = spacy.load("en_core_web_sm") 
+nlp = spacy.load("en_core_web_sm") # изменение формы глагола с помощью pyinflect
 
-#@st.cache_data
-def select_exercise(df_sentences, options, task, answer):
-    
-    for sentence in df_sentences.sentence:
+def select_exercise(df_sentences, sen):
+    for sentence in df_sentences["sentence"]:
+        #st.write(sentence)
         for token in nlp(str(sentence)):
+            #st.write(token)
             if token.pos_=='VERB' and exercise_type == 'Выберите правильную форму глагола':
                 answer = [token.text for token in nlp(str(sentence)) if token.pos_=='VERB']
                 options.append(list(set([token._.inflect('VB'), token._.inflect('VBN'), token._.inflect('VBP'), token._.inflect('VBZ'), token._.inflect('VBG'), token._.inflect('VBD')])))
@@ -89,52 +91,140 @@ def select_exercise(df_sentences, options, task, answer):
         
             elif exercise_type ==  'Расставьте в правильном порядке слова предложения'  and len(nlp(str(sentence))) < 9:
                 options = [token.text for token in nlp(str(sentence))]
+                #options = random.sample(options, len(options))
                 options = [options] * len(options)
                 answer = [token.text for token in nlp(str(sentence))]
                     
                 write_it_df=1
                 task = 'order_words'
-            else: pass                
 
-        if exercise_type == 'Выберите правильный артикль':
-            task = 'articles'
-            answer=[]
-            split_string = sentence.split(" ")
-            #st.write(test_string)
-            #st.write(len(test_string))
-            if len(split_string) in range (3, 20):
-                st.write(len(split_string))
-            for i in split_string:
-                for j in ['a', 'the', 'an']:
-                    if i==j:
-                        answer.append(i)
-                        options.append([' a ', ' the ', ' an '])
-                        break  
-            answer = list(map(lambda x: ' '+ x + ' ', answer))  
-            write_it_df=1     
+            else: pass
+                
+    st.write('func')
 
-        if len(nlp(str(sentence))) in range(3, 20) and len(answer) > 0 and write_it_df==1:                    
-            df.loc[len(df)]=[sentence, options, answer, task, []]  
 
-        # сбрасываем переменные    
-        options=[]  
-        write_it_df=0    
-        answer=[]        
 
-    df["sentence_hidden"] = df["sentence"]
-    for index, row in tqdm(df.iterrows()): 
-        for i in row.answer:
-            if exercise_type == 'Расставьте в правильном порядке слова предложения':
-                df["sentence_hidden"][index] = '__________________________'
-            else: df["sentence_hidden"][index] = df["sentence_hidden"][index].replace(i, ' ___ ')
+select_exercise(df_sentences, df_sentences['sentence'])
+    
+for sentence in df_sentences.sentence:
+        #st.write(sentence)
+    for token in nlp(str(sentence)):
+        #st.write(token)
+        if token.pos_=='VERB' and exercise_type == 'Выберите правильную форму глагола':
+            answer = [token.text for token in nlp(str(sentence)) if token.pos_=='VERB']
+            options.append(list(set([token._.inflect('VB'), token._.inflect('VBN'), token._.inflect('VBP'), token._.inflect('VBZ'), token._.inflect('VBG'), token._.inflect('VBD')])))
+            task = token.pos_
+            write_it_df=1
+
+        elif token.pos_=='ADJ'and exercise_type == 'Выбор правильного прилагательного':
+            answer = [token.text for token in nlp(str(sentence)) if token.pos_=='ADJ']
+            options.append([token.text, token._.inflect('JJS')])
+            #st.write(options)
+            task = token.pos_
+            write_it_df=1
+            #st.write('правильно')
+        # elif str(token) == 'a' and exercise_type == 'Выберите правильный артикль':
+        #     options = ['a', 'the', 'an']
+        #     answer = token
+        #     #task ='article'
+        elif exercise_type ==  'Расставьте в правильном порядке слова предложения'  and len(nlp(str(sentence))) < 9:
+            
+            options = [token.text for token in nlp(str(sentence))]
+            #options = random.sample(options, len(options))
+            options = [options] * len(options)
+            answer = [token.text for token in nlp(str(sentence))]
+            
+            write_it_df=1
+            task = 'order_words'
+
+        else: pass
+
+    if exercise_type == 'Выберите правильный артикль':
+        task = 'articles'
+        answer=[]
+        test_string = sentence.split(" ")
+        #st.write(test_string)
+        for i in test_string:
+            for j in ['a', 'the', 'an']:
+                if i==j:
+                    answer.append(i)
+                    options.append([' a ', ' the ', ' an '])
+                    break  
+        answer = list(map(lambda x: ' '+ x + ' ', answer))  
+        write_it_df=1      
+        #st.write(answer)
+# # отобрать предложения, где есть глагол или прилагательное
+        #st.write(options)
+
+
+    if len(nlp(str(sentence))) in range(3, 20) and len(answer) > 0 and write_it_df==1:    
+              
+        df.loc[len(df)]=[sentence, options, answer, task, []]  
+    options=[]  
+    write_it_df=0    
+    answer=[]
+        #answer=[]
     
 
-    
 
 
-select_exercise(df_sentences, options, task, answer)
- 
+if exercise_type == 'Заполните пропуск':
 
+    st.subheader('Выберите правильные варианты пропущенных слов:')
+
+df["sentence_hidden"] = df["sentence"]
+for index, row in tqdm(df.iterrows()): 
+    for i in row.answer:
+        if exercise_type == 'Расставьте в правильном порядке слова предложения':
+            df["sentence_hidden"][index] = '__________________________'
+        else: df["sentence_hidden"][index] = df["sentence_hidden"][index].replace(i, ' ___ ')
+#df["sentence_hidden"]= df.apply(lambda x: x['sentence'].replace(str(x['answer']), ' ___ '), axis=1)
+#df["sentence_hidden"]= df.apply(lambda x: x['sentence'].replace(str(any(['Little', 'Cap'])), ' ___ '), axis=1)
+
+
+import time
+start = time.time()
+
+
+
+
+
+
+from datetime import datetime
+import time
+
+
+def fib(n):
+      if n <= 1:
+          return n
+      else:
+          return fib( n - 1 ) + fib( n - 2 )
+
+
+start_time = datetime.now()
+
+
+st.write(fib(35))
+
+st.write(datetime.now() - start_time)
+
+cache = { }
+def fib(n):
+    if n in cache:
+         return cache[ n ]    
+    result = 0
+   
+    if n <= 1:
+        result = n
+    else:
+        result = fib(n-1) + fib(n-2)
+        cache[ n ] = result    
+    return result
+
+st.write( fib(50) )    
+st.write(datetime.now() - start_time)
+
+#@st.cache_data
 
 key=0
 
@@ -150,8 +240,19 @@ for index, row in tqdm(df.iterrows()):
         for i in tqdm(range(len(row['options']))):
             key+=1
             option = row['options'][i]
+
+            #option = random.sample(option, len(option))
+            #np.random.shuffle(option)
             random.shuffle(option)
+            # for i in range(len(option)):
             option = ['–––'] + option
+            #st.write(len(option))
+            #st.write(option)
+            #     print(i)
+            #     option[i] = ['–––'] + i
+
+            #option = ['–––'] + option
+        #option = random.sample(option, len(option))
             df['result'][index] =  st.selectbox('nolabel', option, label_visibility="hidden", key =str(key) )
             #st.write(df['result'][index])
 
