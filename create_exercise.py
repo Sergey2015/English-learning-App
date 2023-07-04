@@ -10,7 +10,7 @@ from tqdm import tqdm
 
 nlp = spacy.load("en_core_web_sm") 
 
-class Get_exercise:
+class Create_exercise:
     def __init__(self, task='', answer='', exercise_type='Ничего не выбрано'):
         #self.df = df
         #self.options=options
@@ -18,9 +18,10 @@ class Get_exercise:
         self.answer = answer
         self.exercise_type = exercise_type
     
-    def get_text(self, text):
+    def get_text(self):
         with open('Little_Red_Cap_ Jacob_and_Wilhelm_Grimm.txt') as f:
             self.text = f.read()
+            self.text = self.text.replace('\n','')
             return self.text
 
     def create_df(self):

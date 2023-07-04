@@ -9,7 +9,7 @@ import numpy as np
 
 from tqdm import tqdm
 
-from get_exercise import Get_exercise
+from create_exercise import Create_exercise
 
 #from googletrans import Translator
 
@@ -27,17 +27,16 @@ st.subheader('Вставьте текст для создания упражне
 #text = st.text_area('nolabel', label_visibility="hidden")
 
 
-with open('Little_Red_Cap_ Jacob_and_Wilhelm_Grimm.txt') as f:
-    text = f.read()
+# with open('Little_Red_Cap_ Jacob_and_Wilhelm_Grimm.txt') as f:
+#     text = f.read()
 
-get_ex = Get_exercise()   
-
-text =  get_ex.get_text(text)
-
-text = text.replace('\n','')
+create_exercise = Create_exercise()   
 
 
-text = st.text_area('Текст', text)
+#text = text.replace('\n','')
+
+
+text = st.text_area('Текст', create_exercise.get_text())
 
 
 
@@ -78,7 +77,7 @@ options = []
 # answer = ''
 #df = pd.DataFrame({'sentence':'', 'options': options, 'answer':answer, 'task':task, 'result':[]})
 #df = pd.DataFrame(columns=['sentence', 'options', 'answer', 'task', 'result'])
-df = get_ex.create_df()
+df = create_exercise.create_df()
 nlp = spacy.load("en_core_web_sm") 
 
 #@st.cache_data
@@ -87,7 +86,7 @@ nlp = spacy.load("en_core_web_sm")
     
 #get_ex = Get_exercise(df=df, exercise_type=exercise_type)
 
-df = get_ex.select_exercise(df_sentences, options, exercise_type)
+df = create_exercise.select_exercise(df_sentences, options, exercise_type)
  
 
 
