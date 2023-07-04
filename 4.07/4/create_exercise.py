@@ -40,13 +40,6 @@ class Create_exercise:
         # df_sentences["sentence"]= df_sentences.apply(lambda x: x['sentence'].replace('.', ''), axis=1)
         return self.df
 
-    def tokenization(self, text):
-        self.text=text
-        self.tokens_sens = nltk.tokenize.sent_tokenize(self.text, language='english')
-        self.df_sentences = pd.DataFrame({'sentence': self.tokens_sens})
-        self.df_sentences["sentence"]= self.df_sentences.apply(lambda x: x['sentence'].replace('.', ''), axis=1)    
-        return self.df_sentences
-
 
     def select_exercise(self, df_sentences, options, exercise_type):
 

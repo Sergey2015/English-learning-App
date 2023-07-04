@@ -66,11 +66,11 @@ text = create_exercise.clear_text(text)
 # text = text.replace(':', '')
 # text = text.replace('-"', '')
 
-# tokens_sens = nltk.tokenize.sent_tokenize(text, language='english')
+tokens_sens = nltk.tokenize.sent_tokenize(text, language='english')
 
-# #Создаем датафрейм
-# df_sentences = pd.DataFrame({'sentence': tokens_sens})
-# df_sentences["sentence"]= df_sentences.apply(lambda x: x['sentence'].replace('.', ''), axis=1)
+#Создаем датафрейм
+df_sentences = pd.DataFrame({'sentence': tokens_sens})
+df_sentences["sentence"]= df_sentences.apply(lambda x: x['sentence'].replace('.', ''), axis=1)
 #st.write(df_sentences)
 
 
@@ -85,16 +85,15 @@ df = create_exercise.create_df()
 #@st.cache_data
 
 
-df_sentences = create_exercise.tokenization(text)    
+    
 #get_ex = Get_exercise(df=df, exercise_type=exercise_type)
-#st.write(options)
+
 df = create_exercise.select_exercise(df_sentences, options, exercise_type)
  
 
 
 key=0
 
-df = df[0:num_of_sentenses]
 
 for index, row in df.iterrows():
     col1, col2 = st.columns(2)
