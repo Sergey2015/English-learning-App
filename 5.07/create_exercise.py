@@ -10,26 +10,20 @@ from tqdm import tqdm
 
 nlp = spacy.load("en_core_web_sm") 
 
-# Главный класс приложения
 class Create_exercise:
-    def __init__(self, task='', answer=''):
+    def __init__(self, task='', answer='', exercise_type='Ничего не выбрано'):
         #self.df = df
         #self.options=options
         self.task = task
         self.answer = answer
-        #self.exercise_type = exercise_type
-        
-
- # Загрузка текста 
-    #@st.cache_data
+        self.exercise_type = exercise_type
+    
     def get_text(self):
         with open('Little_Red_Cap_ Jacob_and_Wilhelm_Grimm.txt') as f:
             self.text = f.read()
             self.text = self.text.replace('\n','')
             return self.text
         
-# Очистка текста        
-   # @st.cache_data
     def clear_text(self, text):
         self.text = self.text.lower()
         self.text = self.text.replace('"', '')
@@ -38,7 +32,6 @@ class Create_exercise:
         self.text = self.text.replace('-"', '')
         return self.text
 
-    #st.cache_data
     def create_df(self):
         self.df = pd.DataFrame(columns=['sentence', 'options', 'answer', 'task', 'result'])
         # self.text = text
@@ -47,8 +40,6 @@ class Create_exercise:
         # df_sentences["sentence"]= df_sentences.apply(lambda x: x['sentence'].replace('.', ''), axis=1)
         return self.df
 
-# Токенизация по предложениям и создание ДФ
-    #@st.cache_data
     def tokenization(self, text):
         self.text=text
         self.tokens_sens = nltk.tokenize.sent_tokenize(self.text, language='english')
@@ -56,10 +47,9 @@ class Create_exercise:
         self.df_sentences["sentence"]= self.df_sentences.apply(lambda x: x['sentence'].replace('.', ''), axis=1)    
         return self.df_sentences
 
-# Обработка упражнения и вывод итогового ДФ
-    #@st.cache_data
-    def select_exercise(self, df_sentences, exercise_type):
-        options = []
+
+    def select_exercise(self, df_sentences, options, exercise_type):
+
         for sentence in df_sentences.sentence:
             for token in nlp(str(sentence)):
                 if token.pos_=='VERB' and exercise_type == 'Выберите правильную форму глагола':
@@ -86,6 +76,10 @@ class Create_exercise:
                 self.task = 'articles'
                 self.answer=[]
                 split_string = sentence.split(" ")
+                #st.write(test_string)
+                #st.write(len(test_string))
+                if len(split_string) in range (3, 20):
+                    st.write(len(split_string))
                 for i in split_string:
                     for j in ['a', 'the', 'an']:
                         if i==j:
@@ -104,11 +98,10 @@ class Create_exercise:
             self.answer=[]        
 
         self.df["sentence_hidden"] = self.df["sentence"]
-        for index, row in self.df.iterrows(): 
+        for index, row in tqdm(self.df.iterrows()): 
             for i in row.answer:
-                if exercise_type == 'Расставьте в правильном порядке слова предложения':
-                    self.df["sentence_hidden"][index] = '1'
+                if self.exercise_type == 'Расставьте в правильном порядке слова предложения':
+                    self.df["sentence_hidden"][index] = '__________________________'
                 else: self.df["sentence_hidden"][index] = self.df["sentence_hidden"][index].replace(i, ' ___ ')
-                    
         return self.df
     

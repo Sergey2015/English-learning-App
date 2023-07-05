@@ -7,9 +7,17 @@ import pyinflect
 import random     
 import numpy as np
 
+
+
 from create_exercise import Create_exercise
 
 nlp = spacy.load("en_core_web_sm") 
+
+#from googletrans import Translator
+
+
+#from nltk.corpus import stopwords
+
 
 nltk.download('punkt')
 
@@ -18,9 +26,23 @@ random.seed(42)
 st.header('Генератор упражнений по английскому')
 st.subheader('Вставьте текст для создания упражнения')
 
+#text = st.text_area('nolabel', label_visibility="hidden")
+
+
+# with open('Little_Red_Cap_ Jacob_and_Wilhelm_Grimm.txt') as f:
+#     text = f.read()
+
 create_exercise = Create_exercise()   
 
+
+#text = text.replace('\n','')
+
+
 text = st.text_area('Текст', create_exercise.get_text())
+
+
+
+
 
 
 exercise_type = st.sidebar.selectbox('Выберите тип упражнения:', ['', 'Выберите правильную форму глагола',
@@ -35,10 +57,28 @@ else:
 num_of_sentenses = st.sidebar.slider('Количество предложений', 0, 20, 5)
 st.write("В заданиях будет отображаться", num_of_sentenses, 'предложений')
 
+
+#get_ex.create_df(text)
 text = create_exercise.clear_text(text)
 
+# text = text.replace('"', '')
+# text = text.replace(',', '')
+# text = text.replace(':', '')
+# text = text.replace('-"', '')
+
+# tokens_sens = nltk.tokenize.sent_tokenize(text, language='english')
+
+# #Создаем датафрейм
+# df_sentences = pd.DataFrame({'sentence': tokens_sens})
+# df_sentences["sentence"]= df_sentences.apply(lambda x: x['sentence'].replace('.', ''), axis=1)
+#st.write(df_sentences)
 
 
+options = []
+# task = ''
+# answer = ''
+#df = pd.DataFrame({'sentence':'', 'options': options, 'answer':answer, 'task':task, 'result':[]})
+#df = pd.DataFrame(columns=['sentence', 'options', 'answer', 'task', 'result'])
 df = create_exercise.create_df()
 
 
@@ -46,46 +86,49 @@ df = create_exercise.create_df()
 
 
 df_sentences = create_exercise.tokenization(text)    
-
-df = create_exercise.select_exercise(df_sentences, exercise_type)
+#get_ex = Get_exercise(df=df, exercise_type=exercise_type)
+#st.write(options)
+df = create_exercise.select_exercise(df_sentences, options, exercise_type)
  
 
 
-#key=0
+key=0
 
 df = df[0:num_of_sentenses]
 
 for index, row in df.iterrows():
-    counter = 0               
     col1, col2 = st.columns(2)
     with col1:
         st.write(str(row['sentence_hidden'])) 
 
     with col2:
         option = []
-        #st.write(len(row['options']))
-        #st.write(key+1)
         for i in range(len(row['options'])):
-            #key+=1
+            key+=1
             option = row['options'][i]
             random.shuffle(option)
             option = ['–––'] + option
-            df['result'][index] =  st.selectbox('nolabel', option, label_visibility="hidden", key = str(random.random())) #str(key)
+            df['result'][index] =  st.selectbox('nolabel', option, label_visibility="hidden", key =str(key) )
 
             if df['result'][index] == '–––':
                 pass
 
             elif df['result'][index] == str(row['answer'][i]):
                 st.success('Это правльный ответ', icon="✅")
-                counter += 1
-                if counter == len(row['options']):
-                    st.success(df['sentence'][index])
             
             else:
                 st.error('Попробуйте еще раз', icon="😟")
-            
-    st.write('----------------------')    
-            
+    st.write('----------------------')            
+    
+
+#st.write('part 1', time.time()-start, 'seconds.')
+
+# total_sum = sum(df['total'] for row in df.iterrows())
+
+# if total_sum == len(df.iterrows()):
+#     st.success('Успех!')
+#     st.balloons()
+
 st.write(df)    
 
 
