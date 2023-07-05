@@ -7,13 +7,9 @@ import pyinflect
 import random     
 import numpy as np
 
-from tqdm import tqdm
+from create_exercise import Create_exercise
 
-#from googletrans import Translator
-
-
-#from nltk.corpus import stopwords
-
+nlp = spacy.load("en_core_web_sm") 
 
 nltk.download('punkt')
 
@@ -22,20 +18,9 @@ random.seed(42)
 st.header('Генератор упражнений по английскому')
 st.subheader('Вставьте текст для создания упражнения')
 
-#text = st.text_area('nolabel', label_visibility="hidden")
+create_exercise = Create_exercise()   
 
-
-with open('Little_Red_Cap_ Jacob_and_Wilhelm_Grimm.txt') as f:
-    text = f.read()
-
-text = text.replace('\n','')
-
-
-text = st.text_area('Текст', text)
-
-
-
-
+text = st.text_area('Текст', create_exercise.get_text())
 
 
 exercise_type = st.sidebar.selectbox('Выберите тип упражнения:', ['', 'Выберите правильную форму глагола',
@@ -47,131 +32,62 @@ else:
     st.warning('Для начала выберите в боковом меню тип упражнения')
 
 
+num_of_sentenses = st.sidebar.slider('Количество предложений', 0, 20, 5)
+st.write("В заданиях будет отображаться", num_of_sentenses, 'предложений')
+
+text = create_exercise.clear_text(text)
 
 
 
+df = create_exercise.create_df()
 
-
-text = text.replace('"', '')
-text = text.replace(',', '')
-text = text.replace(':', '')
-text = text.replace('-"', '')
-
-tokens_sens = nltk.tokenize.sent_tokenize(text, language='english')
-
-#Создаем датафрейм
-df_sentences = pd.DataFrame({'sentence': tokens_sens})
-df_sentences["sentence"]= df_sentences.apply(lambda x: x['sentence'].replace('.', ''), axis=1)
-#st.write(df_sentences)
-
-
-options = []
-task = ''
-answer = ''
-df = pd.DataFrame({'sentence':'', 'options': options, 'answer':answer, 'task':task, 'result':[]})
-nlp = spacy.load("en_core_web_sm") 
 
 #@st.cache_data
-def select_exercise(df_sentences, options, task, answer):
-    
-    for sentence in df_sentences.sentence:
-        for token in nlp(str(sentence)):
-            if token.pos_=='VERB' and exercise_type == 'Выберите правильную форму глагола':
-                answer = [token.text for token in nlp(str(sentence)) if token.pos_=='VERB']
-                options.append(list(set([token._.inflect('VB'), token._.inflect('VBN'), token._.inflect('VBP'), token._.inflect('VBZ'), token._.inflect('VBG'), token._.inflect('VBD')])))
-                task = token.pos_
-                write_it_df=1
-            elif token.pos_=='ADJ'and exercise_type == 'Выбор правильного прилагательного':
-                answer = [token.text for token in nlp(str(sentence)) if token.pos_=='ADJ']
-                options.append([token.text, token._.inflect('JJS')])
-                task = token.pos_
-                write_it_df=1
-        
-            elif exercise_type ==  'Расставьте в правильном порядке слова предложения'  and len(nlp(str(sentence))) < 9:
-                options = [token.text for token in nlp(str(sentence))]
-                options = [options] * len(options)
-                answer = [token.text for token in nlp(str(sentence))]
-                    
-                write_it_df=1
-                task = 'order_words'
-            else: pass                
-
-        if exercise_type == 'Выберите правильный артикль':
-            task = 'articles'
-            answer=[]
-            split_string = sentence.split(" ")
-            #st.write(test_string)
-            #st.write(len(test_string))
-            if len(split_string) in range (3, 20):
-                st.write(len(split_string))
-            for i in split_string:
-                for j in ['a', 'the', 'an']:
-                    if i==j:
-                        answer.append(i)
-                        options.append([' a ', ' the ', ' an '])
-                        break  
-            answer = list(map(lambda x: ' '+ x + ' ', answer))  
-            write_it_df=1     
-
-        if len(nlp(str(sentence))) in range(3, 20) and len(answer) > 0 and write_it_df==1:                    
-            df.loc[len(df)]=[sentence, options, answer, task, []]  
-
-        # сбрасываем переменные    
-        options=[]  
-        write_it_df=0    
-        answer=[]        
-
-    df["sentence_hidden"] = df["sentence"]
-    for index, row in tqdm(df.iterrows()): 
-        for i in row.answer:
-            if exercise_type == 'Расставьте в правильном порядке слова предложения':
-                df["sentence_hidden"][index] = '__________________________'
-            else: df["sentence_hidden"][index] = df["sentence_hidden"][index].replace(i, ' ___ ')
-    
-
-    
 
 
-select_exercise(df_sentences, options, task, answer)
+df_sentences = create_exercise.tokenization(text)    
+
+df = create_exercise.select_exercise(df_sentences, exercise_type)
  
 
 
-key=0
+#key=0
 
+df = df[0:num_of_sentenses]
 
-for index, row in tqdm(df.iterrows()):
+for index, row in df.iterrows():
+    counter = 0               
     col1, col2 = st.columns(2)
     with col1:
         st.write(str(row['sentence_hidden'])) 
 
     with col2:
         option = []
+        #st.write(len(row['options']))
+        #st.write(key+1)
         for i in range(len(row['options'])):
-            key+=1
+            #key+=1
             option = row['options'][i]
             random.shuffle(option)
             option = ['–––'] + option
-            df['result'][index] =  st.selectbox('nolabel', option, label_visibility="hidden", key =str(key) )
+            df['result'][index] =  st.selectbox('nolabel', option, label_visibility="hidden", key = str(random.random())) #str(key)
 
             if df['result'][index] == '–––':
                 pass
 
             elif df['result'][index] == str(row['answer'][i]):
                 st.success('Это правльный ответ', icon="✅")
+                counter += 1
+                if counter == len(row['options']):
+                    st.success(df['sentence'][index])
             
             else:
                 st.error('Попробуйте еще раз', icon="😟")
+            
+    st.write('----------------------')    
+            
+st.write(df)
     
-
-#st.write('part 1', time.time()-start, 'seconds.')
-
-# total_sum = sum(df['total'] for row in df.iterrows())
-
-# if total_sum == len(df.iterrows()):
-#     st.success('Успех!')
-#     st.balloons()
-
-st.write(df)    
 
 
 # import streamlit as st
