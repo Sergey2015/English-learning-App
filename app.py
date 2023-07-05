@@ -9,6 +9,23 @@ import numpy as np
 
 from create_exercise import Create_exercise
 
+st.markdown(
+    """
+    <style>
+    .reportview-container {
+        background: url("https://www.internations.org/magazine/a-nation-s-experience-of-learning-english-17888")
+    }
+   .sidebar .sidebar-content {
+        background: url("https://www.internations.org/magazine/a-nation-s-experience-of-learning-english-17888")
+    }
+    </style>
+    """, unsafe_allow_html=True
+)
+
+
+
+
+
 nlp = spacy.load("en_core_web_sm") 
 
 nltk.download('punkt')
@@ -79,14 +96,16 @@ for index, row in df.iterrows():
                 st.success('Это правльный ответ', icon="✅")
                 counter += 1
                 if counter == len(row['options']):
-                    st.success(df['sentence'][index])
+                    #st.success(df['sentence'][index])
+                    current_sent = df['sentence'][index]                    
+                    st.markdown(f':green[{current_sent}]', unsafe_allow_html=True)
             
             else:
                 st.error('Попробуйте еще раз', icon="😟")
             
     st.write('----------------------')    
             
-st.write(df)
+#st.write(df)
     
 
 

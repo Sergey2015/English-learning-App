@@ -107,7 +107,7 @@ class Create_exercise:
         for index, row in self.df.iterrows(): 
             for i in row.answer:
                 if exercise_type == 'Расставьте в правильном порядке слова предложения':
-                    self.df["sentence_hidden"][index] = '1'
+                    self.df["sentence_hidden"][index] =  '1' * len(row.answer)
                 else: self.df["sentence_hidden"][index] = self.df["sentence_hidden"][index].replace(i, ' ___ ')
                     
         return self.df
