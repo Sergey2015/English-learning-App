@@ -21,7 +21,19 @@ background-size: cover;
 
 st.markdown(page_bg_img, unsafe_allow_html=True)
 
-
+st.markdown(
+    """
+    <style>
+    .reportview-container {
+        background: url("https://images.app.goo.gl/LFCobouKtT7oZ7Qv7")
+    }
+   .sidebar .sidebar-content {
+        background: url("https://images.app.goo.gl/LFCobouKtT7oZ7Qv7")
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
 
 nlp = spacy.load("en_core_web_sm") 
