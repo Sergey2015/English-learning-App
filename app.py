@@ -9,19 +9,17 @@ import numpy as np
 
 from create_exercise import Create_exercise
 
-st.markdown(
-    """
-    <style>
-    .reportview-container {
-        background: url("https://www.internations.org/magazine/a-nation-s-experience-of-learning-english-17888")
-    }
-   .sidebar .sidebar-content {
-        background: url("https://www.internations.org/magazine/a-nation-s-experience-of-learning-english-17888")
-    }
-    </style>
-    """, unsafe_allow_html=True
-)
 
+page_bg_img = '''
+<style>
+body {
+background-image: url("https://images.unsplash.com/photo-1542281286-9e0a16bb7366");
+background-size: cover;
+}
+</style>
+'''
+
+st.markdown(page_bg_img, unsafe_allow_html=True)
 
 
 
