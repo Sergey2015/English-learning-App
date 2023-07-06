@@ -5,8 +5,8 @@ import spacy
 import pyinflect
 import random     
 import numpy as np
+import contractions
 
-from tqdm import tqdm
 
 nlp = spacy.load("en_core_web_sm") 
 
@@ -27,6 +27,14 @@ class Create_exercise:
             self.text = f.read()
             self.text = self.text.replace('\n','')
             return self.text
+        
+# Приводим короткие формы глаголов к полной
+    def contracted_text(self, text): 
+        expanded_words = []   
+        for word in text.split():
+            expanded_words.append(contractions.fix(word))  
+        expanded_text = ' '.join(expanded_words)    
+        return expanded_text
         
 # Очистка текста        
    # @st.cache_data
@@ -62,7 +70,7 @@ class Create_exercise:
         options = []
         for sentence in df_sentences.sentence:
             for token in nlp(str(sentence)):
-                if token.pos_=='VERB' and exercise_type == 'Выберите правильную форму глагола':
+                if token.pos_=='VERB' and exercise_type == 'Выберите правильную форму глагола':                    
                     self.answer = [token.text for token in nlp(str(sentence)) if token.pos_=='VERB']
                     options.append(list(set([token._.inflect('VB'), token._.inflect('VBN'), token._.inflect('VBP'), token._.inflect('VBZ'), token._.inflect('VBG'), token._.inflect('VBD')])))
                     self.task = token.pos_
@@ -107,8 +115,10 @@ class Create_exercise:
         for index, row in self.df.iterrows(): 
             for i in row.answer:
                 if exercise_type == 'Расставьте в правильном порядке слова предложения':
-                    self.df["sentence_hidden"][index] =  '1' * len(row.answer)
+                    self.df["sentence_hidden"][index] =  '__ ' * len(row.answer)
                 else: self.df["sentence_hidden"][index] = self.df["sentence_hidden"][index].replace(i, ' ___ ')
+        filename = f'df_{self.task}.csv'
+        self.df.to_csv(filename, index=False)        
                     
         return self.df
     

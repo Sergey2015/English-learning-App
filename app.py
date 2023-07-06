@@ -6,6 +6,7 @@ import spacy
 import pyinflect
 import random     
 import numpy as np
+import contractions
 
 from create_exercise import Create_exercise
 
@@ -71,6 +72,7 @@ df = create_exercise.create_df()
 
 #@st.cache_data
 
+text = create_exercise.contracted_text(text)
 
 df_sentences = create_exercise.tokenization(text)    
 
@@ -115,7 +117,7 @@ for index, row in df.iterrows():
             
     st.write('----------------------')    
             
-#st.write(df)
+st.write(df)
     
 
 
