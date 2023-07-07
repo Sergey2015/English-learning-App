@@ -1,4 +1,5 @@
 
+!pip install contractions
 import nltk
 import streamlit as st
 import pandas as pd
