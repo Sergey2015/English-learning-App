@@ -14,30 +14,30 @@ from ast import literal_eval
 from create_exercise import Create_exercise
 
 
-page_bg_img = '''
-<style>
-body {
-background-image: url("https://images.unsplash.com/photo-1542281286-9e0a16bb7366");
-background-size: cover;
-}
-</style>
-'''
+# page_bg_img = '''
+# <style>
+# .stApp {
+# background-image: url("https://images.unsplash.com/photo-1542281286-9e0a16bb7366");
+# background-size: cover;
+# }
+# </style>
+# '''
 
-st.markdown(page_bg_img, unsafe_allow_html=True)
+# st.markdown(page_bg_img, unsafe_allow_html=True)
 
-st.markdown(
-    """
-    <style>
-    .reportview-container {
-        background: url("https://images.app.goo.gl/LFCobouKtT7oZ7Qv7")
-    }
-   .sidebar .sidebar-content {
-        background: url("https://images.app.goo.gl/LFCobouKtT7oZ7Qv7")
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+# st.markdown(
+#     """
+#     <style>
+#     .reportview-container {
+#         background: url("https://images.app.goo.gl/LFCobouKtT7oZ7Qv7")
+#     }
+#    .sidebar .sidebar-content {
+#         background: url("https://images.app.goo.gl/LFCobouKtT7oZ7Qv7")
+#     }
+#     </style>
+#     """,
+#     unsafe_allow_html=True
+# )
 
 
 nlp = spacy.load("en_core_web_sm") 
