@@ -6,7 +6,7 @@ import pyinflect
 import random     
 import numpy as np
 import contractions
-
+from ast import literal_eval
 
 nlp = spacy.load("en_core_web_sm") 
 
@@ -68,58 +68,77 @@ class Create_exercise:
     #@st.cache_data
     def select_exercise(self, df_sentences, exercise_type):
         options = []
-        for sentence in df_sentences.sentence:
-            for token in nlp(str(sentence)):
-                if token.pos_=='VERB' and exercise_type == 'Выберите правильную форму глагола':                    
-                    self.answer = [token.text for token in nlp(str(sentence)) if token.pos_=='VERB']
-                    options.append(list(set([token._.inflect('VB'), token._.inflect('VBN'), token._.inflect('VBP'), token._.inflect('VBZ'), token._.inflect('VBG'), token._.inflect('VBD')])))
-                    self.task = token.pos_
-                    write_it_df=1
-                elif token.pos_=='ADJ'and exercise_type == 'Выбор правильного прилагательного':
-                    self.answer = [token.text for token in nlp(str(sentence)) if token.pos_=='ADJ']
-                    options.append([token.text, token._.inflect('JJS')])
-                    self.task = token.pos_
-                    write_it_df=1
-            
-                elif exercise_type ==  'Расставьте в правильном порядке слова предложения'  and len(nlp(str(sentence))) < 9:
-                    options = [token.text for token in nlp(str(sentence))]
-                    options = [options] * len(options)
-                    self.answer = [token.text for token in nlp(str(sentence))]
+        try:
+            if exercise_type == 'Выберите правильную форму глагола':
+                self.df = pd.read_csv('df_VERB.csv', converters={'options': literal_eval, 'answer': literal_eval})
+            elif exercise_type == 'Выбор правильного прилагательного':
+                self.df = pd.read_csv('df_ADJ.csv', converters={'options': literal_eval, 'answer': literal_eval})
+            elif exercise_type == 'Расставьте в правильном порядке слова предложения':
+                self.df = pd.read_csv('df_ORDER.csv', converters={'options': literal_eval, 'answer': literal_eval})   
+            elif exercise_type == 'Выберите правильный артикль':
+                self.df = pd.read_csv('df_ARTICLES.csv', converters={'options': literal_eval, 'answer': literal_eval})      
+            # self.df.drop(columns=['result'], axis=1, inplace=True)
+            # self.df.options = self.df.options.astype(list)
+            st.write('Загружен датасет')
+            return self.df
+        except:
+            st.write('Создан датасет')
+            for sentence in df_sentences.sentence:
+                for token in nlp(str(sentence)):
+                    if token.pos_=='VERB' and exercise_type == 'Выберите правильную форму глагола':  
+                        dataset = 'df_VERB.csv'                  
+                        self.answer = [token.text for token in nlp(str(sentence)) if token.pos_=='VERB']
+                        options.append(list(set([token._.inflect('VB'), token._.inflect('VBN'), token._.inflect('VBP'), token._.inflect('VBZ'), token._.inflect('VBG'), token._.inflect('VBD')])))
+                        self.task = token.pos_
+                        write_it_df=1
+                    elif token.pos_=='ADJ'and exercise_type == 'Выбор правильного прилагательного':
+                        dataset = 'df_ADJ.csv'  
+                        self.answer = [token.text for token in nlp(str(sentence)) if token.pos_=='ADJ']
+                        options.append([token.text, token._.inflect('JJS')])
+                        self.task = token.pos_
+                        write_it_df=1
+                
+                    elif exercise_type ==  'Расставьте в правильном порядке слова предложения'  and len(nlp(str(sentence))) < 9:
+                        dataset = 'df_ORDER.csv'  
+                        options = [token.text for token in nlp(str(sentence))]
+                        options = [options] * len(options)
+                        self.answer = [token.text for token in nlp(str(sentence))]
+                            
+                        write_it_df=1
+                        self.task = 'order_words'
+                    else: pass                
+
+                if exercise_type == 'Выберите правильный артикль':
+                    dataset = 'df_ARTICLES.csv'  
+                    self.task = 'articles'
+                    self.answer=[]
+                    split_string = sentence.split(" ")
+                    for i in split_string:
+                        for j in ['a', 'the', 'an']:
+                            if i==j:
+                                self.answer.append(i)
+                                options.append([' a ', ' the ', ' an '])
+                                break  
+                    self.answer = list(map(lambda x: ' '+ x + ' ', self.answer))  
+                    write_it_df=1     
+
+                if len(nlp(str(sentence))) in range(3, 20) and len(self.answer) > 0 and write_it_df==1:                    
+                    self.df.loc[len(self.df)]=[sentence, options, self.answer, self.task, []]  
+
+                # сбрасываем переменные    
+                options=[]  
+                write_it_df=0    
+                self.answer=[]        
+
+            self.df["sentence_hidden"] = self.df["sentence"]
+            for index, row in self.df.iterrows(): 
+                for i in row.answer:
+                    if exercise_type == 'Расставьте в правильном порядке слова предложения':
+                        self.df["sentence_hidden"][index] =  '__ ' * len(row.answer)
+                    else: self.df["sentence_hidden"][index] = self.df["sentence_hidden"][index].replace(i, ' ___ ')
+            #filename = f'df_{self.task}.csv'
+            self.df.to_csv(dataset, index=False)        
                         
-                    write_it_df=1
-                    self.task = 'order_words'
-                else: pass                
-
-            if exercise_type == 'Выберите правильный артикль':
-                self.task = 'articles'
-                self.answer=[]
-                split_string = sentence.split(" ")
-                for i in split_string:
-                    for j in ['a', 'the', 'an']:
-                        if i==j:
-                            self.answer.append(i)
-                            options.append([' a ', ' the ', ' an '])
-                            break  
-                self.answer = list(map(lambda x: ' '+ x + ' ', self.answer))  
-                write_it_df=1     
-
-            if len(nlp(str(sentence))) in range(3, 20) and len(self.answer) > 0 and write_it_df==1:                    
-                self.df.loc[len(self.df)]=[sentence, options, self.answer, self.task, []]  
-
-            # сбрасываем переменные    
-            options=[]  
-            write_it_df=0    
-            self.answer=[]        
-
-        self.df["sentence_hidden"] = self.df["sentence"]
-        for index, row in self.df.iterrows(): 
-            for i in row.answer:
-                if exercise_type == 'Расставьте в правильном порядке слова предложения':
-                    self.df["sentence_hidden"][index] =  '__ ' * len(row.answer)
-                else: self.df["sentence_hidden"][index] = self.df["sentence_hidden"][index].replace(i, ' ___ ')
-        filename = f'df_{self.task}.csv'
-        self.df.to_csv(filename, index=False)        
-                    
-        return self.df
+            return self.df
     
     

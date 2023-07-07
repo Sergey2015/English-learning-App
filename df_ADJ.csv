@@ -1,0 +1,21 @@
+sentence,options,answer,task,result,sentence_hidden
+once upon a time there was a sweet little girl,"[['sweet', 'sweetest'], ['little', 'littlest']]","['sweet', 'little']",ADJ,[],once upon a time there was a  ___   ___  girl
+once she gave her a little cap made of red velvet,"[['little', 'littlest'], ['red', 'reddest']]","['little', 'red']",ADJ,[],once she gave her a  ___  cap made of  ___  velvet
+she is sick and weak and they will do her well,"[['sick', 'sickest'], ['weak', 'weakest']]","['sick', 'weak']",ADJ,[],she is  ___  and  ___  and they will do her well
+when little red cap entered the woods a wolf came up to her,"[['little', 'littlest'], ['red', 'reddest']]","['little', 'red']",ADJ,[],when  ___   ___  cap ente ___  the woods a wolf came up to her
+there is a hedge of hazel bushes there,"[['hazel', 'hazelest']]",['hazel'],ADJ,[],there is a hedge of  ___  bushes there
+she thought if a take a bouquet to grandmother she will be very pleased,"[['pleased', None]]",['pleased'],ADJ,[],she thought if a take a bouquet to grandmother she will be very  ___ 
+anyway it is still early and i will be home on time,"[['early', 'earliest']]",['early'],ADJ,[],anyway it is still  ___  and i will be home on time
+but the wolf ran straight to the grandmother's house and knocked on the doorwho is there?little red cap,"[['red', 'reddest']]",['red'],ADJ,[],but the wolf ran straight to the grandmother's house and knocked on the doorwho is there?little  ___  cap
+i am too weak to get upthe wolf pressed the latch and the door opened,"[['weak', 'weakest'], ['upthe', None]]","['weak', 'upthe']",ADJ,[],i am too  ___  to get  ___  wolf pressed the latch and the door opened
+when she arrived she found to her surprise that the door was open,"[['open', 'openest']]",['open'],ADJ,[],when she arrived she found to her surprise that the door was  ___ 
+he thought it strange that the old woman was snoring so loudly so he decided to take a look,"[['strange', 'strangest'], ['old', 'oldest']]","['strange', 'old']",ADJ,[],he thought it  ___  that the  ___  woman was snoring so loudly so he decided to take a look
+he cut a little more and the girl jumped out and cried oh i was so frightened!,"[['little', 'littlest'], ['more', None], ['frightened', None]]","['little', 'more', 'frightened']",ADJ,[],he cut a  ___   ___  and the girl jumped out and cried oh i was so  ___ !
+it was so dark inside the wolf's body!and then the grandmother came out alive as well,"[['dark', 'darkest'], ['alive', 'alivest']]","['dark', 'alive']",ADJ,[],it was so  ___  inside the wolf's body!and then the grandmother came out  ___  as well
+then little red cap fetched some large heavy stones,"[['little', 'littlest'], ['red', 'reddest'], ['large', 'largest'], ['heavy', 'heaviest']]","['little', 'red', 'large', 'heavy']",ADJ,[],then  ___   ___  cap fetched some  ___   ___  stones
+the grandmother ate the cake and drank the wine that little red cap had brought,"[['little', 'littlest'], ['red', 'reddest']]","['little', 'red']",ADJ,[],the grandmother ate the cake and drank the wine that  ___   ___  cap had brought
+but little red cap took care and went straight to grandmother's,"[['little', 'littlest'], ['red', 'reddest']]","['little', 'red']",ADJ,[],but  ___   ___  cap took care and went straight to grandmother's
+the wicked one walked around the house several times and finally jumped onto the roof,"[['wicked', 'wickedest'], ['several', None]]","['wicked', 'several']",ADJ,[],the  ___  one walked around the house  ___  times and finally jumped onto the roof
+there was a large stone trough in front of the housefetch a bucket little red cap she said,"[['large', 'largest'], ['little', 'littlest'], ['red', 'reddest']]","['large', 'little', 'red']",ADJ,[],there was a  ___  stone trough in front of the housefetch a bucket  ___   ___  cap she said
+little red cap carried water until the large large trough was clear full,"[['little', 'littlest'], ['red', 'reddest'], ['large', 'largest'], ['large', 'largest'], ['clear', 'clearest'], ['full', 'fullest']]","['little', 'red', 'large', 'large', 'clear', 'full']",ADJ,[], ___   ___  cap carried water until the  ___   ___  trough was  ___   ___ 
+and little red cap returned home happily and safely,"[['little', 'littlest'], ['red', 'reddest']]","['little', 'red']",ADJ,[],and  ___   ___  cap returned home happily and safely

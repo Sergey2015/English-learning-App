@@ -7,7 +7,6 @@ import pyinflect
 import random     
 import numpy as np
 import contractions
-from ast import literal_eval
 
 from create_exercise import Create_exercise
 
@@ -109,80 +108,17 @@ for index, row in df.iterrows():
                 st.success('Это правльный ответ', icon="✅")
                 counter += 1
                 if counter == len(row['options']):
-                    st.success(df['sentence'][index])
+                    #st.success(df['sentence'][index])
+                    current_sent = df['sentence'][index]                    
+                    st.markdown(f':green[{current_sent}]', unsafe_allow_html=True)
             
             else:
                 st.error('Попробуйте еще раз', icon="😟")
             
-    st.write('----------------------')   
-
-# df["result"] = np.nan
-# for index, row in df.iterrows():
-#     counter = 0               
-#     col1, col2 = st.columns(2)
-#     with col1:
-#         st.write(str(row['sentence_hidden'])) 
-
-#     with col2:
-#         option = []
-#         #st.write(len(row['options']))
-#         #st.write(key+1)
-#         for i in range(len(row['options'])):
-#             st.write('длина row_options',len(row['options']))
-#             #key+=1
-#             option = row['options'][i]
-#             st.write(option)
-#             random.shuffle(option)
-#             option = ['–––'] + option
-#             st.write(option)
-#             # Выбранный ответ пользователя
-#             df['result'][index] =  st.selectbox('nolabel', option, label_visibility="hidden", key = str(random.random())) #str(key)
-
-#             if df['result'][index] == '–––':
-#                 pass
-
-#             elif df['result'][index] == str(row['answer'][i]):
-#                 st.write(df['result'][index])
-#                 st.write(str(row['answer'][i]))
-#                 st.success('Это правльный ответ', icon="✅")
-#                 counter += 1
-#                 if counter == len(row['options']):
-#                     #st.success(df['sentence'][index])
-#                     current_sent = df['sentence'][index]                    
-#                     st.markdown(f':green[{current_sent}]', unsafe_allow_html=True)
-            
-#             else:
-#                 st.error('Попробуйте еще раз', icon="😟")
-#                 st.write(df['result'][index])
-#                 st.write('row_answer[i]', row['answer'])
-#                 st.write(str(row['answer'][index]))
-#                 st.write(df['answer'][i])
-            
-#     st.write('----------------------')    
+    st.write('----------------------')    
             
 st.write(df)
     
-
-
-# for task in tasks:
-#     col1, col2 = st.columns(2)
-#     with col1:
-#         st.write('')
-#         st.write(str(task['sentence']))
-        
-#     with col2:
-#         for i in range(len(task['options'])):
-#             option = task['options'][i]
-#             task['result'][i] = st.selectbox('nolabel', 
-#                                              ['–––'] + option, 
-#                                              label_visibility="hidden")
-#             if task['result'][i] == '–––':
-#                 pass
-#             elif task['result'][i] == task['answers'][i]:
-#                 st.success('', icon="✅")
-#             else:
-#                 st.error('', icon="😟")
-
 
 
 # import streamlit as st
