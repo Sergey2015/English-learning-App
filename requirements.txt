@@ -7,3 +7,4 @@ spacy-legacy==3.0.12
 spacy-loggers==1.0.4
 spacytextblob==4.0.0
 streamlit==1.23.1
+contractions==0.1.73
