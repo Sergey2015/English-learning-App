@@ -1,3 +1,4 @@
+# Импортируем необходимые библиотеки
 import nltk
 import streamlit as st
 import pandas as pd
@@ -12,23 +13,21 @@ nlp = spacy.load("en_core_web_sm")
 
 # Главный класс приложения
 class Create_exercise:
+    # Конструктор класса
     def __init__(self, task='', answer=''):
-        #self.df = df
-        #self.options=options
         self.task = task
         self.answer = answer
-        #self.exercise_type = exercise_type
+
         
 
- # Загрузка текста 
-    #@st.cache_data
+    # Загрузка текста 
     def get_text(self):
         with open('Little_Red_Cap_ Jacob_and_Wilhelm_Grimm.txt') as f:
             self.text = f.read()
             self.text = self.text.replace('\n','')
             return self.text
         
-# Приводим короткие формы глаголов к полной
+    # Приводим короткие формы глаголов к полной
     def contracted_text(self, text): 
         expanded_words = []   
         for word in text.split():
@@ -36,8 +35,7 @@ class Create_exercise:
         expanded_text = ' '.join(expanded_words)    
         return expanded_text
         
-# Очистка текста        
-   # @st.cache_data
+    # Очистка текста        
     def clear_text(self, text):
         self.text = self.text.lower()
         self.text = self.text.replace('"', '')
@@ -45,18 +43,14 @@ class Create_exercise:
         self.text = self.text.replace(':', '')
         self.text = self.text.replace('-"', '')
         return self.text
-
-    #st.cache_data
+    
+    # Создание пустого датафрейма
     def create_df(self):
         self.df = pd.DataFrame(columns=['sentence', 'options', 'answer', 'task', 'result'])
-        # self.text = text
-        # tokens_sens = nltk.tokenize.sent_tokenize(self.text, language='english')
-        # df_sentences = pd.DataFrame({'sentence': tokens_sens})
-        # df_sentences["sentence"]= df_sentences.apply(lambda x: x['sentence'].replace('.', ''), axis=1)
         return self.df
 
-# Токенизация по предложениям и создание ДФ
-    #@st.cache_data
+    # Токенизация по предложениям и создание ДФ
+    st.cache_data
     def tokenization(self, text):
         self.text=text
         self.tokens_sens = nltk.tokenize.sent_tokenize(self.text, language='english')
@@ -77,12 +71,10 @@ class Create_exercise:
                 self.df = pd.read_csv('df_ORDER.csv', converters={'options': literal_eval, 'answer': literal_eval})   
             elif exercise_type == 'Выберите правильный артикль':
                 self.df = pd.read_csv('df_ARTICLES.csv', converters={'options': literal_eval, 'answer': literal_eval})      
-            # self.df.drop(columns=['result'], axis=1, inplace=True)
-            # self.df.options = self.df.options.astype(list)
-            st.write('Загружен датасет')
+            #st.write('Загружен датасет')
             return self.df
         except:
-            st.write('Создан датасет')
+            #st.write('Создан датасет')
             for sentence in df_sentences.sentence:
                 for token in nlp(str(sentence)):
                     if token.pos_=='VERB' and exercise_type == 'Выберите правильную форму глагола':  
@@ -129,8 +121,11 @@ class Create_exercise:
                 options=[]  
                 write_it_df=0    
                 self.answer=[]        
-
+            
+            # Создаем колонку, где будут храниться предложения с пропусками
             self.df["sentence_hidden"] = self.df["sentence"]
+
+            # Формируем логику обработки ответов
             for index, row in self.df.iterrows(): 
                 for i in row.answer:
                     if exercise_type == 'Расставьте в правильном порядке слова предложения':

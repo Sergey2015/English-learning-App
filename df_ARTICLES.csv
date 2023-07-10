@@ -1,0 +1,32 @@
+sentence,options,answer,task,result,sentence_hidden
+once upon a time there was a sweet little girl,"[[' a ', ' the ', ' an '], [' a ', ' the ', ' an ']]","[' a ', ' a ']",articles,[],once upon ___ time there was ___ sweet little girl
+once she gave her a little cap made of red velvet,"[[' a ', ' the ', ' an ']]",[' a '],articles,[],once she gave her ___ little cap made of red velvet
+here is a piece of cake and a bottle of wine,"[[' a ', ' the ', ' an '], [' a ', ' the ', ' an ']]","[' a ', ' a ']",articles,[],here is ___ piece of cake and ___ bottle of wine
+the grandmother lived out in the woods a half hour from the village,"[[' a ', ' the ', ' an '], [' a ', ' the ', ' an '], [' a ', ' the ', ' an '], [' a ', ' the ', ' an ']]","[' the ', ' the ', ' a ', ' the ']",articles,[],the grandmother lived out in ___ woods ___ half hour from ___ village
+when little red cap entered the woods a wolf came up to her,"[[' a ', ' the ', ' an '], [' a ', ' the ', ' an ']]","[' the ', ' a ']",articles,[],when little red cap entered ___ woods ___ wolf came up to her
+there is a hedge of hazel bushes there,"[[' a ', ' the ', ' an ']]",[' a '],articles,[],there is ___ hedge of hazel bushes there
+why do not you go and take a look?,"[[' a ', ' the ', ' an ']]",[' a '],articles,[],why do not you go and take ___ look?
+and i do not believe you can hear how beautifully the birds are singing,"[[' a ', ' the ', ' an ']]",[' the '],articles,[],and i do not believe you can hear how beautifully ___ birds are singing
+you are walking along as though you were on your way to school in the village,"[[' a ', ' the ', ' an ']]",[' the '],articles,[],you are walking along as though you were on your way to school in ___ village
+she thought if a take a bouquet to grandmother she will be very pleased,"[[' a ', ' the ', ' an '], [' a ', ' the ', ' an ']]","[' a ', ' a ']",articles,[],she thought if ___ take ___ bouquet to grandmother she will be very pleased
+and she ran off into the woods looking for flowers,"[[' a ', ' the ', ' an ']]",[' the '],articles,[],and she ran off into ___ woods looking for flowers
+but the wolf ran straight to the grandmother's house and knocked on the doorwho is there?little red cap,"[[' a ', ' the ', ' an '], [' a ', ' the ', ' an '], [' a ', ' the ', ' an ']]","[' the ', ' the ', ' the ']",articles,[],but ___ wolf ran straight to ___ grandmother's house and knocked on ___ doorwho is there?little red cap
+open the door for mejust press the latch called out the grandmother,"[[' a ', ' the ', ' an '], [' a ', ' the ', ' an '], [' a ', ' the ', ' an ']]","[' the ', ' the ', ' the ']",articles,[],open ___ door for mejust press ___ latch called out ___ grandmother
+i am too weak to get upthe wolf pressed the latch and the door opened,"[[' a ', ' the ', ' an '], [' a ', ' the ', ' an ']]","[' the ', ' the ']",articles,[],i am too weak to get upthe wolf pressed ___ latch and ___ door opened
+he stepped inside went straight to the grandmother's bed and ate her up,"[[' a ', ' the ', ' an ']]",[' the '],articles,[],he stepped inside went straight to ___ grandmother's bed and ate her up
+when she arrived she found to her surprise that the door was open,"[[' a ', ' the ', ' an ']]",[' the '],articles,[],when she arrived she found to her surprise that ___ door was open
+then she went to the bed and pulled back the curtains,"[[' a ', ' the ', ' an '], [' a ', ' the ', ' an ']]","[' the ', ' the ']",articles,[],then she went to ___ bed and pulled back ___ curtains
+he thought it strange that the old woman was snoring so loudly so he decided to take a look,"[[' a ', ' the ', ' an '], [' a ', ' the ', ' an ']]","[' the ', ' a ']",articles,[],he thought it strange that ___ old woman was snoring so loudly so he decided to take ___ look
+he has eaten the grandmother but perhaps she still can be saved,"[[' a ', ' the ', ' an ']]",[' the '],articles,[],he has eaten ___ grandmother but perhaps she still can be saved
+i will not shoot him thought the huntsman,"[[' a ', ' the ', ' an ']]",[' the '],articles,[],i will not shoot him thought ___ huntsman
+he cut a little more and the girl jumped out and cried oh i was so frightened!,"[[' a ', ' the ', ' an '], [' a ', ' the ', ' an ']]","[' a ', ' the ']",articles,[],he cut ___ little more and ___ girl jumped out and cried oh i was so frightened!
+it was so dark inside the wolf's body!and then the grandmother came out alive as well,"[[' a ', ' the ', ' an '], [' a ', ' the ', ' an ']]","[' the ', ' the ']",articles,[],it was so dark inside ___ wolf's body!and then ___ grandmother came out alive as well
+the huntsman took the wolf's pelt,"[[' a ', ' the ', ' an '], [' a ', ' the ', ' an ']]","[' the ', ' the ']",articles,[],the huntsman took ___ wolf's pelt
+the grandmother ate the cake and drank the wine that little red cap had brought,"[[' a ', ' the ', ' an '], [' a ', ' the ', ' an '], [' a ', ' the ', ' an ']]","[' the ', ' the ', ' the ']",articles,[],the grandmother ate ___ cake and drank ___ wine that little red cap had brought
+the wicked one walked around the house several times and finally jumped onto the roof,"[[' a ', ' the ', ' an '], [' a ', ' the ', ' an '], [' a ', ' the ', ' an ']]","[' the ', ' the ', ' the ']",articles,[],the wicked one walked around ___ house several times and finally jumped onto ___ roof
+but the grandmother saw what he was up to,"[[' a ', ' the ', ' an ']]",[' the '],articles,[],but ___ grandmother saw what he was up to
+there was a large stone trough in front of the housefetch a bucket little red cap she said,"[[' a ', ' the ', ' an '], [' a ', ' the ', ' an '], [' a ', ' the ', ' an ']]","[' a ', ' the ', ' a ']",articles,[],there was ___ large stone trough in front of ___ housefetch ___ bucket little red cap she said
+carry the water that i boiled them with to the trough,"[[' a ', ' the ', ' an '], [' a ', ' the ', ' an ']]","[' the ', ' the ']",articles,[],carry ___ water that i boiled them with to ___ trough
+little red cap carried water until the large large trough was clear full,"[[' a ', ' the ', ' an ']]",[' the '],articles,[],little red cap carried water until ___ large large trough was clear full
+the smell of sausage arose into the wolf's nose,"[[' a ', ' the ', ' an '], [' a ', ' the ', ' an ']]","[' the ', ' the ']",articles,[],the smell of sausage arose into ___ wolf's nose
+he slid off the roof fell into the trough and drowned,"[[' a ', ' the ', ' an '], [' a ', ' the ', ' an ']]","[' the ', ' the ']",articles,[],he slid off ___ roof fell into ___ trough and drowned
