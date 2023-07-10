@@ -64,13 +64,13 @@ class Create_exercise:
         options = []
         try:
             if exercise_type == 'Выберите правильную форму глагола':
-                self.df = pd.read_csv('df_VERB.csv', converters={'options': literal_eval, 'answer': literal_eval})
+                self.df = pd.read_csv('datasets/df_VERB.csv', converters={'options': literal_eval, 'answer': literal_eval})
             elif exercise_type == 'Выбор правильного прилагательного':
-                self.df = pd.read_csv('df_ADJ.csv', converters={'options': literal_eval, 'answer': literal_eval})
+                self.df = pd.read_csv('datasets/df_ADJ.csv', converters={'options': literal_eval, 'answer': literal_eval})
             elif exercise_type == 'Расставьте в правильном порядке слова предложения':
-                self.df = pd.read_csv('df_ORDER.csv', converters={'options': literal_eval, 'answer': literal_eval})   
+                self.df = pd.read_csv('datasets/df_ORDER.csv', converters={'options': literal_eval, 'answer': literal_eval})   
             elif exercise_type == 'Выберите правильный артикль':
-                self.df = pd.read_csv('df_ARTICLES.csv', converters={'options': literal_eval, 'answer': literal_eval})      
+                self.df = pd.read_csv('datasets/df_ARTICLES.csv', converters={'options': literal_eval, 'answer': literal_eval})      
             #st.write('Загружен датасет')
             return self.df
         except:
@@ -78,20 +78,20 @@ class Create_exercise:
             for sentence in df_sentences.sentence:
                 for token in nlp(str(sentence)):
                     if token.pos_=='VERB' and exercise_type == 'Выберите правильную форму глагола':  
-                        dataset = 'df_VERB.csv'                  
+                        dataset = 'datasets/df_VERB.csv'                  
                         self.answer = [token.text for token in nlp(str(sentence)) if token.pos_=='VERB']
                         options.append(list(set([token._.inflect('VB'), token._.inflect('VBN'), token._.inflect('VBP'), token._.inflect('VBZ'), token._.inflect('VBG'), token._.inflect('VBD')])))
                         self.task = token.pos_
                         write_it_df=1
                     elif token.pos_=='ADJ'and exercise_type == 'Выбор правильного прилагательного':
-                        dataset = 'df_ADJ.csv'  
+                        dataset = 'datasets/df_ADJ.csv'  
                         self.answer = [token.text for token in nlp(str(sentence)) if token.pos_=='ADJ']
                         options.append([token.text, token._.inflect('JJS')])
                         self.task = token.pos_
                         write_it_df=1
                 
                     elif exercise_type ==  'Расставьте в правильном порядке слова предложения'  and len(nlp(str(sentence))) < 9:
-                        dataset = 'df_ORDER.csv'  
+                        dataset = 'datasets/df_ORDER.csv'  
                         options = [token.text for token in nlp(str(sentence))]
                         options = [options] * len(options)
                         self.answer = [token.text for token in nlp(str(sentence))]
@@ -101,7 +101,7 @@ class Create_exercise:
                     else: pass                
 
                 if exercise_type == 'Выберите правильный артикль':
-                    dataset = 'df_ARTICLES.csv'  
+                    dataset = 'datasets/df_ARTICLES.csv'  
                     self.task = 'articles'
                     self.answer=[]
                     split_string = sentence.split(" ")
